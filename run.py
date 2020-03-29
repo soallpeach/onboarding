@@ -16,7 +16,7 @@ def run_challenge(challenge_name: str, repository: str) -> Union[Result, RunErro
     code = os.system('''
             export REPOSITRY_URL={}
             export CHALLENGE_NAME={}
-            bash run.sh'''.format(p['repository'], 'prime'))
+            bash run.sh'''.format(repository, challenge_name))
     print(code)
     if str(code) != 0:
         # TODO: handle error
