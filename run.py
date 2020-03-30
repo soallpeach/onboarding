@@ -15,7 +15,7 @@ class RunError(object):
 def run_challenge(challenge_name: str, repository: str) -> Union[Result, RunError]:
     print(f"Running challenge ${challenge_name} from repository ${repository}", flush=True)
     code = os.system('''
-            export REPOSITRY_URL={}
+            export REPOSITORY_URL={}
             export CHALLENGE_NAME={}
             bash run.sh'''.format(repository, challenge_name))
     print(code)
