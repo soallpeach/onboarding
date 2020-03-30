@@ -1,6 +1,6 @@
 # Onboarding
 
-Soalpich is a end 2 end programming challege helps developers to learn by implementing simple tasks and compare their implementation with others in terms of design, result, performance and resource footprint. 
+Soalpich is an end 2 end programming challege helps developers to learn by implementing simple tasks and compare their implementation with others in terms of design, result, performance and resource footprint. 
 
 In order to participte in this challenge please do the following steps:
 - Create a public repository in Github/Gitlab or any other Git 
