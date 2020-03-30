@@ -27,5 +27,10 @@ def run_challenge(challenge_name: str, repository: str) -> Union[Result, RunErro
 if __name__ == '__main__':
     with open('participants.yml') as participants_stream:
         participants = yaml.load(participants_stream, Loader=yaml.FullLoader)
-    for p in participants:
-        result = run_challenge('prime', p['repository'])
+
+    with open('challenges.yml') as challenges_stream:
+        challenges = yaml.load(challenges_stream, Loader=yaml.FullLoader)
+
+    for challenge in challenges:
+        for p in participants:
+            result = run_challenge(challenge['name'], p['repository'])
