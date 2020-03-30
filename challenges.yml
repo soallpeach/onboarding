@@ -1,0 +1,3 @@
+- name: prime
+  description: map prime namumers to 1 otherwise 0
+  input_model: file
