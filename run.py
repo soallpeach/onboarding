@@ -59,7 +59,6 @@ class ChallengeExecution(object):
         duration = round(elapsed - start, 3)
 
         p.wait()
-        print(p.poll())
         stdout_lines = p.stdout.readlines() if p.stdout else ''
         stderr_lines = p.stderr.readlines() if p.stderr else ''
 
