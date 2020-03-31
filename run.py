@@ -26,7 +26,9 @@ class ChallengeResult(object):
 
 
 class ChallengeError(Exception):
-    pass
+    def __init__(self, message: str, step_result: StepResult):
+        self.message = message
+        self.step_result = step_result
 
 
 class ChallengeExecution(object):
@@ -43,7 +45,8 @@ class ChallengeExecution(object):
                 bash {} 
                 '''.format(self.repository, self.challenge_name, script_path),
                              shell=True,
-                             stdout=subprocess.PIPE
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE
                              )
 
         elapsed = time.time()
@@ -52,7 +55,7 @@ class ChallengeExecution(object):
         p.wait()
         print(p.poll())
         stdout_lines = p.stdout.readlines() if p.stdout else ''
-        stderr_lines = p.stdin.readlines() if p.stdin else ''
+        stderr_lines = p.stderr.readlines() if p.stderr else ''
 
         stdout = ''.join([line.decode("utf-8") for line in stdout_lines])
         stderr = ''.join([line.decode("utf-8") for line in stderr_lines])
@@ -61,7 +64,7 @@ class ChallengeExecution(object):
 
 
 def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeResult, ChallengeError]:
-    print(f"Running challenge ${challenge_execution.challenge_name} from repository ${challenge_execution.repository}",
+    print(f"Running challenge {challenge_execution.challenge_name} from repository {challenge_execution.repository}",
           flush=True)
     build_result = challenge_execution.run_step('build', 'scripts/build.sh')
     if build_result.code != 0:
@@ -88,3 +91,4 @@ if __name__ == '__main__':
         for p in participants:
             ce = ChallengeExecution(challenge['name'], p['repository'])
             result = run_challenge(ce)
+            print(result)
