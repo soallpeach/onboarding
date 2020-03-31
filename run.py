@@ -55,10 +55,10 @@ class ChallengeExecution(object):
                              env=script_envs
                              )
 
+        p.wait()
         elapsed = time.time()
         duration = round(elapsed - start, 3)
 
-        p.wait()
         stdout_lines = p.stdout.readlines() if p.stdout else ''
         stderr_lines = p.stderr.readlines() if p.stderr else ''
 
