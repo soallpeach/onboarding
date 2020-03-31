@@ -1,5 +1,6 @@
 from typing import Union
 
+import os
 import yaml
 import subprocess
 import time
@@ -38,15 +39,13 @@ class ChallengeExecution(object):
 
     def run_step(self, name: str, script_path: str) -> StepResult:
         start = time.time()
+        script_envs = {**os.environ, 'CHALLENGE_NAME': self.challenge_name, 'REPOSITORY_URL': self.repository}
 
-        p = subprocess.Popen('''
-                export REPOSITORY_URL={}
-                export CHALLENGE_NAME={}
-                bash {} 
-                '''.format(self.repository, self.challenge_name, script_path),
+        p = subprocess.Popen('bash {} '.format(script_path),
                              shell=True,
                              stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE
+                             stderr=subprocess.PIPE,
+                             env=script_envs
                              )
 
         elapsed = time.time()
