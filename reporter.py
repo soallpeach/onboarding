@@ -1,6 +1,7 @@
 from typing import Union
 
 from requests import session, Session
+import json
 
 import os
 
@@ -13,11 +14,28 @@ session = Session()
 
 def get_session() -> Session:
     session.headers.update({
-        'Authorization': 'TOEKN ' + os.getenv('API_SECRET_KEY', 'STRONG_TOKEN')
+        'Authorization': 'TOKEN ' + os.getenv('API_SECRET_KEY', 'STRONG_TOKEN'),
+        'Content-Type': 'application/json'
     })
     return session
 
 
-def report(result: Union[ChallengeResult, ChallengeError]):
-    response = get_session().post(f'{BASE_URL}/scores', json=result)
+class ReportRequest(object):
+    nickname: str
+    challenge_name: str
+    run_id: str
+    result: Union[ChallengeResult, ChallengeError]
+
+    def __init__(self, nickname: str, challenge_name: str, run_id: str, result: Union[ChallengeResult, ChallengeError]):
+        self.nickname = nickname
+        self.challenge_name = challenge_name
+        self.run_id = run_id
+        self.result = result
+
+
+def report(nickname: str, challenge_name: str, run_id: str, result: Union[ChallengeResult, ChallengeError]):
+    request = ReportRequest(nickname, challenge_name, run_id, result)
+    request_json = json.dumps(request.__dict__, default=lambda o: o.__dict__, indent=4)
+    response = get_session().post(f'{BASE_URL}/scores', data=request_json)
     print(response)
+    print(response.text)
