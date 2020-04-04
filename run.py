@@ -3,8 +3,8 @@ from typing import Union
 import os
 import yaml
 import subprocess
-import time
 import reporter
+import time
 
 from models import StepResult, ChallengeResult, ChallengeError
 
@@ -62,6 +62,7 @@ if __name__ == '__main__':
     with open('challenges.yml') as challenges_stream:
         challenges = yaml.load(challenges_stream, Loader=yaml.FullLoader)
 
+    run_id = int(time.time())
     for challenge in challenges:
         challenge_name = challenge['name']
         for p in participants:
@@ -69,5 +70,5 @@ if __name__ == '__main__':
             nickname = p['nickname']
             ce = ChallengeExecution(challenge_name, p['repository'])
             result = run_challenge(ce)
-            reporter.report(nickname, challenge_name, 1, result)
+            reporter.report(nickname, challenge_name, run_id, result)
             print(result)
