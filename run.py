@@ -4,6 +4,7 @@ import os
 import yaml
 import subprocess
 import time
+import reporter
 
 from models import StepResult, ChallengeResult, ChallengeError
 
@@ -66,3 +67,4 @@ if __name__ == '__main__':
             ce = ChallengeExecution(challenge['name'], p['repository'])
             result = run_challenge(ce)
             print(result)
+            reporter.report(result)
