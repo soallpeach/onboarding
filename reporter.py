@@ -25,12 +25,14 @@ class ReportRequest(object):
     challenge_name: str
     run_id: str
     result: Union[ChallengeResult, ChallengeError]
+    state: str
 
     def __init__(self, nickname: str, challenge_name: str, run_id: str, result: Union[ChallengeResult, ChallengeError]):
         self.nickname = nickname
         self.challenge_name = challenge_name
         self.run_id = run_id
         self.result = result
+        self.state = 'PASSED' if isinstance(result, ChallengeResult) else 'FAILED'
 
 
 def report(nickname: str, challenge_name: str, run_id: str, result: Union[ChallengeResult, ChallengeError]):
