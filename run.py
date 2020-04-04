@@ -63,8 +63,9 @@ if __name__ == '__main__':
         challenges = yaml.load(challenges_stream, Loader=yaml.FullLoader)
 
     for challenge in challenges:
+        challenge_name = challenge['name']
         for p in participants:
-            ce = ChallengeExecution(challenge['name'], p['repository'])
+            ce = ChallengeExecution(challenge_name, p['repository'])
             result = run_challenge(ce)
             print(result)
-            reporter.report(result)
+            reporter.report('nickname', challenge_name, 1, result)
