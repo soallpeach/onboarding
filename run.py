@@ -65,7 +65,9 @@ if __name__ == '__main__':
     for challenge in challenges:
         challenge_name = challenge['name']
         for p in participants:
+            repository = p['repository']
+            nickname = p['nickname']
             ce = ChallengeExecution(challenge_name, p['repository'])
             result = run_challenge(ce)
+            reporter.report(nickname, challenge_name, 1, result)
             print(result)
-            reporter.report('nickname', challenge_name, 1, result)
