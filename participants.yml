@@ -2,20 +2,21 @@
   profile: https://github.com/soallpeach
   repository: https://github.com/soallpeach/sample
 
-
 - nickname: iamvee
   profile: https://github.com/iamvee
   repository: https://github.com/iamvee/sample
-
 
 - nickname: tohidheshmati
   profile: https://github.com/TohidHeshmati
   repository: https://github.com/TohidHeshmati/SoAllPeach
 
-
 - nickname: payamfaryadres
   profile: https://github.com/payamfaryadres
   repository: https://github.com/payamfaryadres/sample
+
+- nickname: s_soroosh
+  profile: https://github.com/psycho-ir
+  repository: https://github.com/psycho-ir/soallpeach
   
 - nickname: "amygdala :: ∀ a. a → IO Memory"
   profile: https://github.com/thebrodmann
