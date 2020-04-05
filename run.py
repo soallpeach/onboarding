@@ -48,6 +48,7 @@ def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeRes
     if run_result.code != 0:
         return ChallengeError('Error in running the code', run_result)
     validate_result = challenge_execution.run_step('validate', 'scripts/validate.sh')
+    challenge_execution.run_step('cleanup', 'scripts/cleanup.sh')
 
     if validate_result.code != 0:
         return ChallengeError('Error in validating the result', validate_result)
