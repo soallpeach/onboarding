@@ -1,7 +1,7 @@
 ---
 name: Participate in Soallpeach
 about: Fill this form to participate in Soallpeach
-title: Par
+title: Participate in Soallpeach
 labels: ''
 assignees: ''
 
