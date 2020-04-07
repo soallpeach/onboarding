@@ -7,6 +7,6 @@ assignees: ''
 
 ---
 
-My nickname:
-My profile: 
-My repository url:
+My nickname: <!-- Pick a Nickname -->
+My profile:  <!-- Share a link to your profile in Github, Gitlab, Twitter or any other social network -->
+My repository URL: <!-- Link to your repository  -->
