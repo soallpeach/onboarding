@@ -18,14 +18,6 @@
   profile: https://github.com/Xcess
   repository: https://github.com/Xcess/soallpeach
 
-- nickname: "amygdala :: ∀ a. a → IO Memory"
-  profile: https://github.com/thebrodmann
-  repository: https://github.com/thebrodmann/soallpeach
-
-- nickname: graymind75
-  profile: https://github.com/graymind75
-  repository: https://github.com/graymind75/soallpeach
-
 - nickname: GlassesPi
   profile: https://github.com/glassespi
   repository: https://github.com/glassespi/peachful
@@ -37,3 +29,11 @@
 - nickname: Muhammadddev
   profile: https://github.com/muhammadddev
   repository: https://github.com/muhammadddev/soallpeach
+
+- nickname: "amygdala :: ∀ a. a → IO Memory"
+  profile: https://github.com/thebrodmann
+  repository: https://github.com/thebrodmann/soallpeach
+
+- nickname: graymind75
+  profile: https://github.com/graymind75
+  repository: https://github.com/graymind75/soallpeach
