@@ -14,7 +14,7 @@ class ChallengeExecution(object):
         self.repository = repository
         self.challenge_name = challenge_name
 
-    def run_step(self, name: str, script_path: str) -> StepResult:
+    def run_step(self, name: str, script_path: str, timeout: int = 10 * 60) -> StepResult:
         start = time.time()
         script_envs = {**os.environ, 'CHALLENGE_NAME': self.challenge_name, 'REPOSITORY_URL': self.repository}
 
@@ -25,7 +25,10 @@ class ChallengeExecution(object):
                              env=script_envs
                              )
 
-        p.wait()
+        try:
+            p.wait(timeout)
+        except subprocess.TimeoutExpired as e:
+            return StepResult(name, 9999, timeout, '', 'Timeout')
         elapsed = time.time()
         duration = round(elapsed - start, 3)
 
@@ -47,7 +50,7 @@ def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeRes
     run_result = challenge_execution.run_step('run', 'scripts/run_in_file_program.sh')
     if run_result.code != 0:
         return ChallengeError('Error in running the code', run_result)
-    validate_result = challenge_execution.run_step('validate', 'scripts/validate.sh')
+    validate_result = challenge_execution.run_step('validate', 'scripts/validate.sh', timeout=10)
     challenge_execution.run_step('cleanup', 'scripts/cleanup.sh')
 
     if validate_result.code != 0:
