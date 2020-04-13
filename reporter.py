@@ -55,8 +55,8 @@ def report(nickname: str, challenge_name: str, run_id: str, result: Union[Challe
 
 def start_round(round_id: int, challenge_name: str):
     response = get_session().post(f'{BASE_URL}/challenges/{challenge_name}/rounds',
-                                  json={'round_id': round_id, 'challenge_name': challenge_name})
-    raise_error_on_not_ok(response, f'Error in starting round {round_id} chalenge {challenge_name}')
+                                  json={'id': round_id, 'challenge_name': challenge_name})
+    raise_error_on_not_ok(response, f'Error in starting round {round_id} challenge {challenge_name}')
 
 
 def finish_round(round_id: int, challenge_name: str):
