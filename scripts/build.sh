@@ -1,5 +1,4 @@
 set -e
-BASE_PATH=$(pwd)
 rm -rf  workspace
 mkdir workspace && cd workspace
 git clone $REPOSITORY_URL $(pwd)
