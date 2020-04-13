@@ -38,6 +38,9 @@ class ChallengeExecution(object):
         stdout = ''.join([line.decode("utf-8") for line in stdout_lines])
         stderr = ''.join([line.decode("utf-8") for line in stderr_lines])
 
+        print(stderr)
+        print(stdout)
+
         return StepResult(name, int(p.poll()), duration, stdout, stderr)
 
 
@@ -69,6 +72,7 @@ if __name__ == '__main__':
     run_id = int(time.time())
     for challenge in challenges:
         challenge_name = challenge['name']
+        reporter.start_round(run_id, challenge_name)
         for p in participants:
             repository = p['repository']
             nickname = p['nickname']
@@ -76,3 +80,4 @@ if __name__ == '__main__':
             result = run_challenge(ce)
             reporter.report(nickname, challenge_name, run_id, result)
             print(result)
+        reporter.finish_round(run_id, challenge_name)
