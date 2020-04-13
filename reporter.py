@@ -27,10 +27,10 @@ class ReportRequest(object):
     result: Union[ChallengeResult, ChallengeError]
     state: str
 
-    def __init__(self, nickname: str, challenge_name: str, run_id: str, result: Union[ChallengeResult, ChallengeError]):
+    def __init__(self, nickname: str, challenge_name: str, round_id: str, result: Union[ChallengeResult, ChallengeError]):
         self.nickname = nickname
         self.challenge_name = challenge_name
-        self.run_id = run_id
+        self.round = round_id
         self.result = result
         self.state = 'PASSED' if isinstance(result, ChallengeResult) else 'FAILED'
 
@@ -60,5 +60,5 @@ def start_round(round_id: int, challenge_name: str):
 
 
 def finish_round(round_id: int, challenge_name: str):
-    response = get_session().patch(f'{BASE_URL}/challenges/{challenge_name}/rounds{round_id}', json={'status': 'DONE'})
+    response = get_session().patch(f'{BASE_URL}/challenges/{challenge_name}/rounds/{round_id}', json={'state': 'FINISHED'})
     raise_error_on_not_ok(response, f'Error in finishing round {round_id} challenge {challenge_name}')
