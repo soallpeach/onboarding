@@ -50,7 +50,7 @@ def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeRes
     build_result = challenge_execution.run_step('build', 'scripts/build.sh')
     if build_result.code != 0:
         return ChallengeError('Error in building the image', build_result)
-    run_result = challenge_execution.run_step('run', 'scripts/run_in_file_program.sh')
+    run_result = challenge_execution.run_step('run', 'scripts/run_in_file_program.sh', timeout=20)
     if run_result.code != 0:
         return ChallengeError('Error in running the code', run_result)
     validate_result = challenge_execution.run_step('validate', 'scripts/validate.sh', timeout=10)
