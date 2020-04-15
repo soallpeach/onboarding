@@ -14,8 +14,9 @@ class ChallengeExecution(object):
         self.repository = repository
         self.challenge_name = challenge_name
 
-    def run_step(self, name: str, script_path: str, timeout: int = 10 * 60) -> StepResult:
-        start = time.time()
+    def run_step(self, name: str, script_path: str, timeout: int = 10 * 60, get_durtion_from_stdout: bool = False) -> StepResult:
+        if not get_durtion_from_stdout:
+            start = time.time()
         script_envs = {**os.environ, 'CHALLENGE_NAME': self.challenge_name, 'REPOSITORY_URL': self.repository}
 
         p = subprocess.Popen('bash {} '.format(script_path),
@@ -29,8 +30,6 @@ class ChallengeExecution(object):
             p.wait(timeout)
         except subprocess.TimeoutExpired as e:
             return StepResult(name, 9999, timeout, '', 'Timeout')
-        elapsed = time.time()
-        duration = round(elapsed - start, 3)
 
         stdout_lines = p.stdout.readlines() if p.stdout else ''
         stderr_lines = p.stderr.readlines() if p.stderr else ''
@@ -41,6 +40,14 @@ class ChallengeExecution(object):
         print(stderr)
         print(stdout)
 
+        if not get_durtion_from_stdout:
+            elapsed = time.time()
+            duration = round(elapsed - start, 3)
+        else:
+            try:
+                duration = float(stdout)
+            except ValueError:
+                duration = None
         return StepResult(name, int(p.poll()), duration, stdout, stderr)
 
 
@@ -50,7 +57,7 @@ def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeRes
     build_result = challenge_execution.run_step('build', 'scripts/build.sh')
     if build_result.code != 0:
         return ChallengeError('Error in building the image', build_result)
-    run_result = challenge_execution.run_step('run', 'scripts/run_in_file_program.sh', timeout=20)
+    run_result = challenge_execution.run_step('run', 'scripts/run_in_file_program.sh', timeout=20, get_durtion_from_stdout=True)
     if run_result.code != 0:
         return ChallengeError('Error in running the code', run_result)
     validate_result = challenge_execution.run_step('validate', 'scripts/validate.sh', timeout=10)
