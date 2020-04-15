@@ -1,4 +1,4 @@
-set -eux
+set -eu
 BASE_PATH=$(pwd)
 cd workspace/$CHALLENGE_NAME
 mkdir data/
