@@ -15,8 +15,7 @@ class ChallengeExecution(object):
         self.challenge_name = challenge_name
 
     def run_step(self, name: str, script_path: str, timeout: int = 10 * 60, get_durtion_from_stdout: bool = False) -> StepResult:
-        if not get_durtion_from_stdout:
-            start = time.time()
+        start = time.time()
         script_envs = {**os.environ, 'CHALLENGE_NAME': self.challenge_name, 'REPOSITORY_URL': self.repository}
 
         p = subprocess.Popen('bash {} '.format(script_path),
@@ -40,10 +39,10 @@ class ChallengeExecution(object):
         print(stderr)
         print(stdout)
 
-        if not get_durtion_from_stdout:
-            elapsed = time.time()
-            duration = round(elapsed - start, 3)
-        else:
+        elapsed = time.time()
+        duration = round(elapsed - start, 3)
+
+        if get_durtion_from_stdout:
             try:
                 duration = float(stdout)
             except ValueError:
