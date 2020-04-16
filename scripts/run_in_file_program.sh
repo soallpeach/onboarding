@@ -20,5 +20,5 @@ STOP_TIMESTAMP=$(date --date=$STOP_DATE +'%s.%3N')
 
 docker container rm "$CHALLENGE_NAME-container" &> /dev/null
 
-echo $(bc <<< "$STOP_TIMESTAMP - $START_TIMESTAMP")
+echo "::::DURATION="$(bc <<< "$STOP_TIMESTAMP - $START_TIMESTAMP")
 

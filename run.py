@@ -44,7 +44,8 @@ class ChallengeExecution(object):
 
         if get_durtion_from_stdout:
             try:
-                duration = float(stdout)
+                duration_line = list(filter(lambda line: line.startswith(b'::::DURATION='), stdout_lines))[0][13:]
+                duration = float(duration_line)
             except ValueError:
                 duration = None
         return StepResult(name, int(p.poll()), duration, stdout, stderr)
