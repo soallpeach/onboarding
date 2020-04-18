@@ -1,4 +1,10 @@
 set -eu
+
+DATE_COMMAND="date"
+
+if [[ $(uname -s) == "Darwin" ]]; then
+  DATE_COMMAND="gdate"
+fi
 BASE_PATH=$(pwd)
 cd workspace/$CHALLENGE_NAME
 mkdir data/
