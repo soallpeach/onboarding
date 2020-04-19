@@ -1,3 +1,11 @@
+class Challenge(object):
+    def __init__(self, name: str, description: str, input_model: str, custom_runner: bool):
+        self.name = name
+        self.description = description
+        self.input_model = input_model
+        self.custom_runner = custom_runner
+
+
 class StepResult(object):
     def __init__(self, name: str, code: int, duration: int,
                  stdout: str, stderr: str):
