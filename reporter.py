@@ -5,7 +5,7 @@ import json
 
 import os
 
-from models import ChallengeResult, ChallengeError
+from models import ChallengeResult, ChallengeError, ChallengeResult2
 
 BASE_URL = os.getenv('API_URL', 'https://soallpeach-api-soroosh.fandogh.cloud')
 
@@ -27,12 +27,13 @@ class ReportRequest(object):
     result: Union[ChallengeResult, ChallengeError]
     state: str
 
-    def __init__(self, nickname: str, challenge_name: str, round_id: str, result: Union[ChallengeResult, ChallengeError]):
+    def __init__(self, nickname: str, challenge_name: str, round_id: str,
+                 result: Union[ChallengeResult, ChallengeError]):
         self.nickname = nickname
         self.challenge_name = challenge_name
         self.round = round_id
         self.result = result
-        self.state = 'PASSED' if isinstance(result, ChallengeResult) else 'FAILED'
+        self.state = 'PASSED' if isinstance(result, ChallengeResult2) else 'FAILED'
 
 
 def is_ok(status_code: int) -> bool:
@@ -60,5 +61,6 @@ def start_round(round_id: int, challenge_name: str):
 
 
 def finish_round(round_id: int, challenge_name: str):
-    response = get_session().patch(f'{BASE_URL}/challenges/{challenge_name}/rounds/{round_id}', json={'state': 'FINISHED'})
+    response = get_session().patch(f'{BASE_URL}/challenges/{challenge_name}/rounds/{round_id}',
+                                   json={'state': 'FINISHED'})
     raise_error_on_not_ok(response, f'Error in finishing round {round_id} challenge {challenge_name}')
