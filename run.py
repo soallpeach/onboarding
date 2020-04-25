@@ -7,7 +7,7 @@ import reporter
 import time
 import shutil
 
-from models import StepResult, ChallengeResult, ChallengeError, Challenge
+from models import StepResult, ChallengeResult, ChallengeError, Challenge, ChallengeResult2
 
 
 class ChallengeExecution(object):
@@ -20,9 +20,10 @@ class ChallengeExecution(object):
         shutil.copytree(f'./challenges/{self.challenge.name}', './workspace/')
 
     def run_step(self, cmd: str, name: str, script_path: str, timeout: int = 10 * 60,
-                 get_durtion_from_stdout: bool = False) -> StepResult:
+                 get_durtion_from_stdout: bool = False, parameters={}) -> StepResult:
         start = time.time()
-        script_envs = {**os.environ, 'CHALLENGE_NAME': self.challenge.name, 'REPOSITORY_URL': self.repository}
+        script_envs = {**os.environ, **parameters,
+                       'CHALLENGE_NAME': self.challenge.name, 'REPOSITORY_URL': self.repository}
 
         p = subprocess.Popen(f'{cmd} {script_path}',
                              shell=True,
@@ -83,16 +84,17 @@ def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeRes
         return ChallengeError('Error in building the image', build_result)
 
     get_duration_from_stdout = True if challenge_execution.challenge.input_model == 'file' else False
+    step_results = {}
     if challenge_execution.challenge.custom_runner:
-        run_result = challenge_execution.run_step('bash', 'run', f'./workspace/run.sh', timeout=10,
-                                                  get_durtion_from_stdout=get_duration_from_stdout)
-        if run_result.code != 0:
-            return ChallengeError('Error in running the code', run_result)
+        for step in challenge_execution.challenge.steps:
+            step_result = challenge_execution.run_step(step.runner, step.name, step.script, step.timeout,
+                                                       parameters=challenge_execution.challenge.parameters)
+            step_results[step_result.name] = step_result
 
-        validate_result = challenge_execution.run_step('python', 'validate', f'./workspace/validate.py', timeout=10)
+            if step_result.code != 0:
+                return ChallengeError('Error in validating the result', step_result)
 
-        if validate_result.code != 0:
-            return ChallengeError('Error in validating the result', validate_result)
+        return ChallengeResult2(**step_results)
 
     else:
         run_script = run_scripts.get(challenge_execution.challenge.input_model)
@@ -105,8 +107,8 @@ def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeRes
         if validate_result.code != 0:
             return ChallengeError('Error in validating the result', validate_result)
 
-    challenge_execution.run_step('bash', 'cleanup', 'scripts/cleanup.sh')
-    return ChallengeResult(build_result, run_result, validate_result)
+        challenge_execution.run_step('bash', 'cleanup', 'scripts/cleanup.sh')
+        return ChallengeResult(build_result, run_result, validate_result)
 
 
 if __name__ == '__main__':
@@ -118,16 +120,14 @@ if __name__ == '__main__':
 
     run_id = int(time.time())
     for challenge_dict in challenges:
-        challenge_name = challenge_dict['name']
-        challenge_input_model = challenge_dict['input_model']
-        custom_runner = challenge_dict['custom_runner']
-        challenge = Challenge(challenge_name, '', challenge_input_model, custom_runner)
-        reporter.start_round(run_id, challenge_name)
+        challenge = Challenge.from_dict(challenge_dict)
+
+        reporter.start_round(run_id, challenge.name)
         for p in participants:
             repository = p['repository']
             nickname = p['nickname']
             ce = ChallengeExecution(challenge, p['repository'])
             result = run_challenge(ce)
-            reporter.report(nickname, challenge_name, run_id, result)
+            reporter.report(nickname, challenge.name, run_id, result)
             print(result)
-        reporter.finish_round(run_id, challenge_name)
+        reporter.finish_round(run_id, challenge.name)
