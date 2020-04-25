@@ -1,4 +1,17 @@
 from dataclasses import dataclass
+from typing import List, Dict
+
+
+@dataclass
+class ChallengeStep(object):
+    name: str
+    runner: str
+    script: str
+    timeout: int
+
+    @staticmethod
+    def from_dict(dict):
+        return ChallengeStep(dict['name'], dict['runner'], dict['script'], dict['timeout'])
 
 
 @dataclass
@@ -7,6 +20,18 @@ class Challenge(object):
     description: str
     input_model: str
     custom_runner: bool
+    steps: List[ChallengeStep]
+    parameters: Dict[str, str]
+
+    @staticmethod
+    def from_dict(dict):
+        challenge_name = dict['name']
+        challenge_input_model = dict['input_model']
+        custom_runner = dict['custom_runner']
+        parameters = dict['parameters']
+        steps = [ChallengeStep.from_dict(step_dict) for step_dict in dict.get('steps', [])]
+        challenge = Challenge(challenge_name, '', challenge_input_model, custom_runner, steps, parameters)
+        return challenge
 
 
 @dataclass
@@ -23,6 +48,14 @@ class ChallengeResult(object):
     validate_result: StepResult
     run_result: StepResult
     build_result: StepResult
+
+
+class ChallengeResult2(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+
+    def __str__(self) -> str:
+        return str(self.__dict__)
 
 
 @dataclass
