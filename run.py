@@ -42,6 +42,10 @@ class ChallengeExecution(object):
 
             print(stderr)
             print(stdout)
+            try:
+                p.kill()
+            except Exception as e:
+                print(e)
             return StepResult(name, 9999, timeout, stdout, stderr + '\nTimeout')
 
         stdout_lines = p.stdout.readlines() if p.stdout else ''
