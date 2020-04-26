@@ -3,6 +3,9 @@ name: Run tests
 on:
   schedule:
     - cron: 0 * * * *
+  push:
+    branches: 
+      - master
 
 jobs:
   build:
