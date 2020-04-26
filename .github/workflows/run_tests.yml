@@ -22,7 +22,7 @@ jobs:
       run: |
         mkdir vegeta
         cd vegeta
-        curl -LO https://github.com/tsenart/vegeta/releases/download/v6.1.1/vegeta-v6.1.1-linux-amd64.tar.gz
+        curl -LO https://github.com/tsenart/vegeta/releases/download/v12.8.3/vegeta-12.8.3-linux-amd64.tar.gz
         tar -xvf vegeta-*
         ls
         chmod +x vegeta
