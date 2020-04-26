@@ -9,7 +9,7 @@ ENDPOINT = os.getenv('ENDPOINT', 'http://localhost:8080')
 validation_result = {}
 with open(f'workspace/code/{challenge_name}/payload.txt') as payload_file:
     payload = int(payload_file.read())
-expected_result = test_rate * test_duration  * payload
+expected_result = test_rate * test_duration * payload
 
 try:
     response = requests.get(f'{ENDPOINT}/count')
@@ -18,7 +18,7 @@ try:
         validation_result['reason'] = f'/count returned status code {response.status_code}'
     elif int(response.text) != expected_result:
         validation_result['status'] = 'FAILED'
-        validation_result['reason'] = f'/count returned values is {response.text} but should be {expected_result}'
+        validation_result['reason'] = f'/count returned value is {response.text} but should be {expected_result}'
     else:
         validation_result['status'] = 'SUCCEEED'
 
