@@ -24,6 +24,8 @@ jobs:
         cd vegeta
         curl -LO https://github.com/tsenart/vegeta/releases/download/v6.1.1/vegeta-v6.1.1-linux-amd64.tar.gz
         tar -xvf vegeta-*
+        ls
+        chmod +x vegeta
         echo "::add-path::"$(pwd)/vegeta
         cd ..
         python -m pip install --upgrade pip
@@ -32,4 +34,5 @@ jobs:
       env:
         API_SECRET_KEY: ${{ secrets.API_SECRET_KEY }}
       run: |
+        export PATH=$(pwd)/vegeta:$PATH
         python run.py
