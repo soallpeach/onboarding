@@ -27,8 +27,8 @@ class Challenge(object):
     def from_dict(dict):
         challenge_name = dict['name']
         challenge_input_model = dict['input_model']
-        custom_runner = dict['custom_runner']
-        parameters = dict['parameters']
+        custom_runner = dict.get('custom_runner', False)
+        parameters = dict.get('parameters', {})
         steps = [ChallengeStep.from_dict(step_dict) for step_dict in dict.get('steps', [])]
         challenge = Challenge(challenge_name, '', challenge_input_model, custom_runner, steps, parameters)
         return challenge

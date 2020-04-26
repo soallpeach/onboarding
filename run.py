@@ -118,16 +118,15 @@ if __name__ == '__main__':
     with open('challenges.yml') as challenges_stream:
         challenges = yaml.load(challenges_stream, Loader=yaml.FullLoader)
 
-    run_id = int(time.time())
     for challenge_dict in challenges:
         challenge = Challenge.from_dict(challenge_dict)
-
-        reporter.start_round(run_id, challenge.name)
+        round_id = int(time.time())
+        reporter.start_round(round_id, challenge.name)
         for p in participants:
             repository = p['repository']
             nickname = p['nickname']
             ce = ChallengeExecution(challenge, p['repository'])
             result = run_challenge(ce)
-            reporter.report(nickname, challenge.name, run_id, result)
+            reporter.report(nickname, challenge.name, round_id, result)
             print(result)
-        reporter.finish_round(run_id, challenge.name)
+        reporter.finish_round(round_id, challenge.name)
