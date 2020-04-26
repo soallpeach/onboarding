@@ -6,7 +6,7 @@ if [[ $(uname -s) == "Darwin" ]]; then
   DATE_COMMAND="gdate"
 fi
 BASE_PATH=$(pwd)
-cd workspace/$CHALLENGE_NAME
+cd workspace/code/$CHALLENGE_NAME
 mkdir data/
 cp $BASE_PATH/challenges/$CHALLENGE_NAME/input.txt data/input.txt
 
