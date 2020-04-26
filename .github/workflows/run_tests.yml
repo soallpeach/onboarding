@@ -1,5 +1,4 @@
 name: Run tests
-
 on:
   schedule:
     - cron: 0 * * * *
