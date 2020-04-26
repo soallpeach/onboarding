@@ -3,8 +3,8 @@
   input_model: http
   custom_runner: true
   parameters:
-    duration: '30'
-    rate: '300'
+    duration: '20'
+    rate: '100'
   steps:
     - name: run
       runner: bash
@@ -18,6 +18,6 @@
       script: workspace/metrics.py
       timeout: 10
 
-- name: prime
-  description: map prime numbers to 1 otherwise 0
-  input_model: file
+#- name: prime
+#  description: map prime numbers to 1 otherwise 0
+#  input_model: file

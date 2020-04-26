@@ -17,6 +17,12 @@ jobs:
         python-version: 3.8
     - name: Install dependencies
       run: |
+        mkdir vegeta
+        cd vegeta
+        curl -LO https://github.com/tsenart/vegeta/releases/download/v6.1.1/vegeta-v6.1.1-linux-amd64.tar.gz
+        tar -xvf vegeta-*
+        mv vegeta /bin/vegeta
+        cd ..
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run
