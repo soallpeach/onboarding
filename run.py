@@ -95,9 +95,6 @@ def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeRes
                                                        parameters=challenge_execution.challenge.parameters)
             step_results[step_result.name] = step_result
 
-            if step_result.code != 0:
-                return ChallengeError('Error in validating the result', step_result)
-
         return ChallengeResult2(**step_results)
 
     else:
