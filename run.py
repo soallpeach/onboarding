@@ -78,22 +78,24 @@ run_scripts = {
 }
 
 
-def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeResult, ChallengeError]:
+def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeResult, ChallengeResult2, ChallengeError]:
     print(f"Running challenge {challenge_execution.challenge.name} from repository {challenge_execution.repository}",
           flush=True)
 
     challenge_execution.prepare_workspace()
     build_result = challenge_execution.run_step('bash', 'build', 'scripts/build.sh')
     if build_result.code != 0:
-        return ChallengeError('Error in building the image', build_result)
+        return ChallengeResult2(build=build_result)
 
     get_duration_from_stdout = True if challenge_execution.challenge.input_model == 'file' else False
-    step_results = {}
+    step_results = {build_result.name: build_result}
     if challenge_execution.challenge.custom_runner:
         for step in challenge_execution.challenge.steps:
             step_result = challenge_execution.run_step(step.runner, step.name, step.script, step.timeout,
                                                        parameters=challenge_execution.challenge.parameters)
             step_results[step_result.name] = step_result
+            if step_result.code != 0:
+                break
 
         return ChallengeResult2(**step_results)
 
