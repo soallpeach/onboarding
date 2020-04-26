@@ -1,6 +1,3 @@
-- name: prime
-  description: map prime numbers to 1 otherwise 0
-  input_model: file
 - name: countme
   description: tbd
   input_model: http
@@ -20,3 +17,7 @@
       runner: python
       script: workspace/metrics.py
       timeout: 10
+
+- name: prime
+  description: map prime numbers to 1 otherwise 0
+  input_model: file
