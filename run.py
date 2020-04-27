@@ -83,7 +83,7 @@ def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeRes
           flush=True)
 
     challenge_execution.prepare_workspace()
-    build_result = challenge_execution.run_step('bash', 'build', 'scripts/build.sh')
+    build_result = challenge_execution.run_step('bash', 'build', 'scripts/build.sh', timeout=300)
     if build_result.code != 0:
         return ChallengeResult2(build=build_result)
 
