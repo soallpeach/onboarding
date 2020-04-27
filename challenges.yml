@@ -3,7 +3,7 @@
   input_model: http
   custom_runner: true
   parameters:
-    duration: '20'
+    duration: '45'
     rate: '300'
   steps:
     - name: run
