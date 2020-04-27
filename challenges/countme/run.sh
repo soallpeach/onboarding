@@ -3,7 +3,7 @@ set -eu
 SEED=$(echo $((1 + RANDOM % 10)))
 BASE_PATH=$(pwd)/workspace
 cd workspace/code/$CHALLENGE_NAME
-echo $SEED > payload.txt
+echo -n $SEED > payload.txt
 mkdir data/
 
 set +e
