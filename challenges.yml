@@ -17,6 +17,10 @@
       runner: python
       script: workspace/metrics.py
       timeout: 10
+    - name: cleanup
+      runner: bash
+      script: workspace/cleanup.sh
+      timeout: 120
 
 #- name: prime
 #  description: map prime numbers to 1 otherwise 0
