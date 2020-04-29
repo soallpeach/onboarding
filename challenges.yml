@@ -4,7 +4,7 @@
   custom_runner: true
   parameters:
     duration: '45'
-    rate: '500'
+    rate: '1000'
   steps:
     - name: run
       runner: bash
