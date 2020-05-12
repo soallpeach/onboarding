@@ -8,6 +8,7 @@ import os
 from models import ChallengeResult, ChallengeError, ChallengeResult2
 
 BASE_URL = os.getenv('API_URL', 'https://soallpeach-api-soroosh.fandogh.cloud')
+NO_UPLOAD = os.getenv('NO_UPLOAD', None) is not None
 
 session = Session()
 
@@ -48,6 +49,8 @@ def raise_error_on_not_ok(response: Response, message: str):
 
 
 def report(nickname: str, challenge_name: str, run_id: str, result: Union[ChallengeResult, ChallengeError]):
+    if NO_UPLOAD:
+        return
     request = ReportRequest(nickname, challenge_name, run_id, result)
     request_json = json.dumps(request.__dict__, default=lambda o: o.__dict__, indent=4)
     response = get_session().post(f'{BASE_URL}/scores', data=request_json)
@@ -55,12 +58,16 @@ def report(nickname: str, challenge_name: str, run_id: str, result: Union[Challe
 
 
 def start_round(round_id: int, challenge_name: str):
+    if NO_UPLOAD:
+        return
     response = get_session().post(f'{BASE_URL}/challenges/{challenge_name}/rounds',
                                   json={'id': round_id, 'challenge_name': challenge_name})
     raise_error_on_not_ok(response, f'Error in starting round {round_id} challenge {challenge_name}')
 
 
 def finish_round(round_id: int, challenge_name: str):
+    if NO_UPLOAD:
+        return
     response = get_session().patch(f'{BASE_URL}/challenges/{challenge_name}/rounds/{round_id}',
                                    json={'state': 'FINISHED'})
     raise_error_on_not_ok(response, f'Error in finishing round {round_id} challenge {challenge_name}')
