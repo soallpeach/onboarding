@@ -1,6 +1,5 @@
 import re
 from typing import Union
-
 import os
 import yaml
 import subprocess
@@ -97,7 +96,7 @@ def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeRes
           flush=True)
 
     challenge_execution.prepare_workspace()
-    clone_result = challenge_execution.run_step('bash', 'build', 'scripts/clone.sh')
+    clone_result = challenge_execution.run_step('bash', 'build', 'scripts/clone.sh', timeout=300)
     if clone_result.code != 0:
         return ChallengeResult2(build=clone_result)
     commit_info = get_commit_info(challenge_execution, clone_result.stdout.strip())
