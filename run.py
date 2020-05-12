@@ -100,7 +100,7 @@ def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeRes
     if clone_result.code != 0:
         return ChallengeResult2(build=clone_result)
     commit_info = get_commit_info(challenge_execution, clone_result.stdout.strip())
-    build_result = challenge_execution.run_step('bash', 'build', 'scripts/build.sh')
+    build_result = challenge_execution.run_step('bash', 'build', 'scripts/build.sh', timeout=300)
     if build_result.code != 0:
         return ChallengeResult2(build=build_result)
 
