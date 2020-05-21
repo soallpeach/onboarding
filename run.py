@@ -1,13 +1,17 @@
+import re
 from typing import Union
-
 import os
 import yaml
 import subprocess
-import reporter
 import time
 import shutil
 
-from models import StepResult, ChallengeResult, ChallengeError, Challenge, ChallengeResult2
+from models import StepResult, ChallengeResult, ChallengeError, Challenge, ChallengeResult2, CommitInfo
+
+if os.environ.get("NO_REPORT", None) is None:
+    import reporter
+else:
+    import local_reporter as reporter
 
 
 class ChallengeExecution(object):
@@ -78,11 +82,28 @@ run_scripts = {
 }
 
 
+def get_commit_info(challenge_execution: ChallengeExecution, commit_log_line: str):
+    try:
+        match_object = re.match(r'^(?P<hash>[\d\w]+),(?P<subject>.+)$', commit_log_line)
+        hash_value, subject = match_object.groups()
+    except Exception:
+        subject = hash_value = "UNKNOWN"
+    return CommitInfo(
+        repository_url=challenge_execution.repository,
+        hash=hash_value,
+        subject=subject
+    )
+
+
 def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeResult, ChallengeResult2, ChallengeError]:
     print(f"Running challenge {challenge_execution.challenge.name} from repository {challenge_execution.repository}",
           flush=True)
 
     challenge_execution.prepare_workspace()
+    clone_result = challenge_execution.run_step('bash', 'build', 'scripts/clone.sh', timeout=300)
+    if clone_result.code != 0:
+        return ChallengeResult2(build=clone_result)
+    commit_info = get_commit_info(challenge_execution, clone_result.stdout.strip())
     build_result = challenge_execution.run_step('bash', 'build', 'scripts/build.sh', timeout=300)
     if build_result.code != 0:
         return ChallengeResult2(build=build_result)
@@ -97,7 +118,7 @@ def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeRes
             if step_result.code != 0:
                 break
 
-        return ChallengeResult2(**step_results)
+        return ChallengeResult2(commit_info=commit_info, **step_results)
 
     else:
         run_script = run_scripts.get(challenge_execution.challenge.input_model)
@@ -111,7 +132,7 @@ def run_challenge(challenge_execution: ChallengeExecution) -> Union[ChallengeRes
             return ChallengeError('Error in validating the result', validate_result)
 
         challenge_execution.run_step('bash', 'cleanup', 'scripts/cleanup.sh')
-        return ChallengeResult(build_result, run_result, validate_result)
+        return ChallengeResult(commit_info, build_result, run_result, validate_result)
 
 
 if __name__ == '__main__':

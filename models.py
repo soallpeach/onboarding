@@ -2,6 +2,14 @@ from dataclasses import dataclass
 from typing import List, Dict
 
 
+
+@dataclass
+class CommitInfo(object):
+    repository_url: str
+    hash: str
+    subject: str
+
+
 @dataclass
 class ChallengeStep(object):
     name: str
@@ -45,6 +53,7 @@ class StepResult(object):
 
 @dataclass
 class ChallengeResult(object):
+    commit_info: CommitInfo
     validate_result: StepResult
     run_result: StepResult
     build_result: StepResult
@@ -62,3 +71,4 @@ class ChallengeResult2(object):
 class ChallengeError(Exception):
     message: str
     step_result: StepResult
+
