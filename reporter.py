@@ -9,6 +9,7 @@ from models import ChallengeResult, ChallengeError, ChallengeResult2
 
 BASE_URL = os.getenv('API_URL', 'https://soallpeach-api-soroosh.fandogh.cloud')
 
+
 session = Session()
 
 
