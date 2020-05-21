@@ -3,11 +3,15 @@ from typing import Union
 import os
 import yaml
 import subprocess
-import reporter
 import time
 import shutil
 
 from models import StepResult, ChallengeResult, ChallengeError, Challenge, ChallengeResult2, CommitInfo
+
+if os.environ.get("NO_REPORT", None) is None:
+    import reporter
+else:
+    import local_reporter as reporter
 
 
 class ChallengeExecution(object):
